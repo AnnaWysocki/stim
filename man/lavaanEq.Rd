@@ -13,7 +13,7 @@ which effects to constrain to a non-zero value}
 \item{S}{Sample covariance matrix}
 }
 \value{
-A character vector
+A character vector which contains the lavaan syntax to specify the latent variables, variances, and covariances
 }
 \description{
 Create lavaan syntax based on the blueprint matrix

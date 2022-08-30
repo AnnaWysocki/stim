@@ -4,7 +4,7 @@
 #'                  which effects to constrain to a non-zero value
 #' @param S Sample covariance matrix
 #'
-#' @return A character vector
+#' @return A character vector which contains the lavaan syntax to specify the latent variables, variances, and covariances
 #' @keywords internal
 #'
 #' @examples

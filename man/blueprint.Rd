@@ -8,15 +8,15 @@ which effects to constrain to a non-zero value}
 blueprint(effects, use)
 }
 \arguments{
-\item{effects}{A data frame that contains information on which effects to
+\item{effects}{A data frame that contains information on which cross-lagged effects to
 estimate or constrain to a value other than zero. Each row
-represents one effect. The \code{effects} object  must have three
+represents one effect. The \code{effects} object  must have four
 columns: column 1 has the variable names for the predictors,
-column 2 has the variable names for the outcomes, and column
-3 has the names of the effects (if the effect should be estimated)
-or the numeric value the effect should be set at (if the effect
-is not to be estimated but rather to be set to a value other
-than zero).}
+column 2 has the variable names for the outcomes, column
+3 has the names of the estimated effect or the value an unestimated
+effect should be constrained to, and column 4 has information
+on whether the effect should be estimated. This table can be
+created by using the \code{effectTable} function}
 
 \item{use}{A vector with the variable names that will be used in the
 stability-informed model}
@@ -31,9 +31,9 @@ which effects to constrain to a non-zero value
 }
 \examples{
 \dontrun{
-effects <- data.frame(predictor = "X_0", outcome = "Y", name = "CLxy")
+effects <- data.frame(predictor = "X_0", outcome = "Y", name = "CLxy", estimate = "Yes")
 use <- c("X", "Y")
-CreateBlueprint(effects, use)
+blueprint(effects, use)
 }
 
 }

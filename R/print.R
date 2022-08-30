@@ -1,7 +1,7 @@
 #' stim print function
 #'
 #' @param out A stim object
-#' @param digits Number of digits to round to
+#' @param digits Number of digits to round parameters to
 #'
 #' @return A result table
 #' @keywords internal

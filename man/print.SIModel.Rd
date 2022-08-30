@@ -9,7 +9,7 @@
 \arguments{
 \item{out}{A stim object}
 
-\item{digits}{Number of digits to round to}
+\item{digits}{Number of digits to round parameters to}
 }
 \value{
 A result table

@@ -10,27 +10,26 @@ modelImpliedEq(S, blueprint, stability, residualcov)
 \arguments{
 \item{S}{Sample covariance matrix}
 
-\item{blueprint}{A character matrix which specifies which effects to estimate and
+\item{blueprint}{A character matrix that specifies which effects to estimate and
 which effects to constrain to a non-zero value}
 
-\item{stability}{A data frame that contains stability information for each
-variable in the model. If unnamed SIM will assume the stability
-values are in the same order as the provided data set/
-covariance matrix.}
+\item{stability}{A named object that contains stability information for each
+variable in the model.}
 
 \item{residualcov}{A list with both the lavaan syntax for the residual covariance
 and a dataframe with the variable names}
 }
 \value{
-A character vector with the model implied equations for the autoregressive
-effects and the phantom covariances.
+A list of 1) A character vector with the model implied equations for the autoregressive
+effects and the phantom variable covariances, and 2) the symbolic psi and covariance
+matrices that were used to get the model implied equations.
 }
 \description{
 Get the model implied symbolic equations for the auto-regressive effects and
 the covariances between the phantom variables
 }
 \examples{
-
+\dontrun{
 S <- matrix( c(1, .3, .3, 1), nrow = 2, ncol = 2)
 colnames(S) <- rownames(S) <- c("X", "Y")
 
@@ -44,5 +43,6 @@ rownames(blueprint) <- c("X_0", "Y_0")
                      Variables = data.frame(V1 = "X", V2 = "Y", Name = "RCovXY"))
 
  modelImpliedEq(S, blueprint, stability, residualcov)
-
 }
+}
+\keyword{internal}

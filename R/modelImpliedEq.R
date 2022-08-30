@@ -2,17 +2,16 @@
 #' the covariances between the phantom variables
 #'
 #' @param S Sample covariance matrix
-#' @param blueprint A character matrix which specifies which effects to estimate and
+#' @param blueprint A character matrix that specifies which effects to estimate and
 #'                  which effects to constrain to a non-zero value
-#' @param stability A data frame that contains stability information for each
-#'                  variable in the model. If unnamed SIM will assume the stability
-#'                  values are in the same order as the provided data set/
-#'                  covariance matrix.
+#' @param stability A named object that contains stability information for each
+#'                  variable in the model.
 #' @param residualcov A list with both the lavaan syntax for the residual covariance
 #'                    and a dataframe with the variable names
 #'
-#' @return A character vector with the model implied equations for the autoregressive
-#'         effects and the phantom covariances.
+#' @return A list of 1) A character vector with the model implied equations for the autoregressive
+#'         effects and the phantom variable covariances, and 2) the symbolic psi and covariance
+#'         matrices that were used to get the model implied equations.
 #' @keywords internal
 #'
 #' @examples
@@ -31,6 +30,7 @@
 #'
 #'  modelImpliedEq(S, blueprint, stability, residualcov)
 #'}
+
 modelImpliedEq <- function(S, blueprint, stability, residualcov){
 
   SymbolicMats <- symbMatrix(blueprint, residualcov)
