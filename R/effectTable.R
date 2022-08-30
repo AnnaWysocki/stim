@@ -2,10 +2,14 @@
 #'
 #' @param model An object with the model description for the cross-sectional model in lavaan syntax
 #'
-#' @return A data frame with information on which effects to estimate and which to constrain. Each
-#'        row represents one effect and specifies which variable is the predictor and outcome of the effect.
-#'        The name column contains information on whether the effect should be estimated--if the name is a
-#'        character (e.g., CLxy)--or if the effect should be constrained to a value other than 0 (e.g., .3)
+#' @return A list with information on the cross-lagged paths and the residual covariances. The cross-lagged effect table has
+#'         information on which cross-lagged effects to estimate and which to constrain. Each
+#'         row represents one effect and specifies which variable is the predictor and outcome of the effect.
+#'         The name column contains information on either the name of the estimated effect (e.g., CLxy)
+#'         or what value the unestimated effect should be constrained to (e.g., .3).
+#'         The residual covariance list has the lavaan syntax to specify that specific residuals should be allowed to
+#'         covary, and a table with information on which variables should have covarying residuals and what the name of
+#'         that residual covariance parameter should be.
 #'
 #' @export
 #'
@@ -13,8 +17,10 @@
 #'
 #' #estimate effect from X to Y
 #' #constrain effect from Y to X to .3
+#' #allow X and Y's residuals to covary
 #' model <- c('Y ~  X
-#'             X ~ .3 * Y')
+#'             X ~ .3 * Y
+#'             X ~~ Y')
 #'
 #' effectTable(model)
 

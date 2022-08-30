@@ -13,10 +13,10 @@
 #'
 #' @return A character vector with the model implied equations for the autoregressive
 #'         effects and the phantom covariances.
-#' @export
+#' @keywords internal
 #'
 #' @examples
-#'
+#'\dontrun{
 #' S <- matrix( c(1, .3, .3, 1), nrow = 2, ncol = 2)
 #' colnames(S) <- rownames(S) <- c("X", "Y")
 #'
@@ -30,7 +30,7 @@
 #'                      Variables = data.frame(V1 = "X", V2 = "Y", Name = "RCovXY"))
 #'
 #'  modelImpliedEq(S, blueprint, stability, residualcov)
-#'
+#'}
 modelImpliedEq <- function(S, blueprint, stability, residualcov){
 
   SymbolicMats <- symbMatrix(blueprint, residualcov)
