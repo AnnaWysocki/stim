@@ -13,55 +13,72 @@ resultTable <- function(modelList){
 
   ResultMatrix <- as.data.frame(matrix(0,
                                        nrow = modelList$modelsEstimated,
-                                       ncol = modelList$q + modelList$p * 2))
+                                       ncol = modelList$q * 3 + modelList$p * 2))
+
   for(i in 1:modelList$modelsEstimated){
 
     lavaanLambda <- lavaan::inspect(modelList$lavaanObjects[[i]], what = "std")$lambda
-    AReffects <- diag(lavaanLambda)
 
-    CLeffects <- CLName <- rep(0, nrow(estimatedEffects))
+    AReffects <- as.data.frame(t(diag(lavaanLambda)))
 
     lavaanTable <- lavaan::parameterestimates(modelList$lavaanObjects[[i]])
 
+    CLName <- rep(0, nrow(estimatedEffects))
+    CLTable <- NULL
+
     for(j in 1:nrow(estimatedEffects)) {
 
-      CLeffects[j] <- lavaanTable[which(lavaanTable$label == estimatedEffects$name[j]), "est"]
-      CLName[j] <- estimatedEffects$name[j]
+      CLeffects <- lavaanTable[which(lavaanTable$label == estimatedEffects$name[j]), c("est",
+                                                                                      "se", "pvalue")]
+      CLName[j] <-  estimatedEffects$name[j]
+
+
+      CLTable <- unlist(c(CLTable, CLeffects))
+
     }
+
+
+    ModelResults <- cbind(modelList$stability[i,], AReffects, t(CLTable))
 
     if(!is.null(modelList$ResidualCovariance$Syntax)){
 
-      Rcov <- RcovName <- length(modelList$ResidualCovariance$Syntax)
+      RcovTable <- NULL
+      RcovName <- rep(0, length(modelList$ResidualCovariance$Syntax))
 
-      for(j in 1: length(Rcov)) {
+      for(j in 1: length(RcovName)) {
 
-        RcovName <- modelList$ResidualCovariance$Variables$name[j]
-        Rcov[j] <- lavaanTable[which(lavaanTable$label == RcovName), "est"]
+        RcovName[j] <- modelList$ResidualCovariance$Variables$name[j]
+        Rcov <- lavaanTable[which(lavaanTable$label == RcovName), c("est",
+                                                                       "se", "pvalue")]
 
+        RcovTable <- unlist(c(RcovTable, Rcov))
+
+        }
+
+      ModelResults <- cbind(ModelResults, t(RcovTable))
       }
 
-      ResultMatrix[i, ] <- unlist(c(modelList$stability[i, ], AReffects, CLeffects,
-                                    Rcov))
+
+    ResultMatrix[i, ] <- ModelResults
+  }
 
 
-      colnames(ResultMatrix) <- c(paste0("Stability", colnames(modelList$stability)),
-                                  paste0("AR", rownames(lavaanLambda)),
-                                  CLName,
-                                  RcovName)
-
-    }else{
-      ResultMatrix[i, ] <- unlist(c(modelList$stability[i, ], AReffects, CLeffects))
+  ResultLabels <- c(paste0("Stability", colnames(modelList$stability)),
+                    paste0("AR", colnames(modelList$stability)),
+                    as.vector(apply(as.data.frame(CLName), 1,
+                                    function(x){paste0(x, c("", "_SE", "_Pvalue"))})))
 
 
-      colnames(ResultMatrix) <- c(paste0("Stability", colnames(modelList$stability)),
-                                  paste0("AR", rownames(lavaanLambda)),
-                                  CLName)
+  if( !is.null(modelList$ResidualCovariance$Syntax) ){
 
-
-    }
+  ResultLabels <- c(ResultLabels,
+                    as.vector(apply(as.data.frame(RcovName), 1,
+                                  function(x){paste0(x, c("", "_SE", "_Pvalue"))})))
 
   }
 
+
+  colnames(ResultMatrix) <- ResultLabels
   ResultMatrix <- data.frame(Model = paste0("Model ", 1:nrow(ResultMatrix)), ResultMatrix)
 
   return(ResultMatrix)
