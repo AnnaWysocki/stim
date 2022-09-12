@@ -45,8 +45,11 @@ resultTable <- function(modelList){
 
     }
 
+    RCovestimatedEffects <- modelList$ResidualCovariance$Variables[modelList$ResidualCovariance$Variables$estimate == "Yes", ]
+
     if(!is.null(modelList$ResidualCovariance$Syntax)){
 
+      if(nrow(RCovestimatedEffects) != 0){
       RcovTable <- NULL
       RcovName <- rep(0, length(modelList$ResidualCovariance$Syntax))
 
@@ -61,7 +64,7 @@ resultTable <- function(modelList){
         }
 
       ModelResults <- cbind(ModelResults, t(RcovTable))
-      }
+      }}
 
 
     ResultMatrix[i, ] <- ModelResults
@@ -80,7 +83,7 @@ resultTable <- function(modelList){
 
   }
 
-  if( !is.null(modelList$ResidualCovariance$Syntax) ){
+  if( !is.null(RCovestimatedEffects) ){
 
   ResultLabels <- c(ResultLabels,
                     as.vector(apply(as.data.frame(RcovName), 1,

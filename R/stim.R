@@ -131,7 +131,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   p <- length(use)
   df <- (p * (p-1)) /2
 
-  modelList$q <- sum(effects$estimate == "Yes", nrow(modelList$ResidualCovariance$Variables))
+  modelList$q <- sum(effects$estimate == "Yes", modelList$ResidualCovariance$Variables$estimate == "Yes")
 
   if (modelList$q > df ) stop("The number of specified parameters to estimate are greater than the degrees of freedom.")
 
