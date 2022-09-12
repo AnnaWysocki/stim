@@ -21,10 +21,14 @@ resultTable <- function(modelList){
 
     AReffects <- as.data.frame(t(diag(lavaanLambda)))
 
+    ModelResults <- cbind(modelList$stability[i,], AReffects)
+
     lavaanTable <- lavaan::parameterestimates(modelList$lavaanObjects[[i]])
 
     CLName <- rep(0, nrow(estimatedEffects))
     CLTable <- NULL
+
+    if(nrow(estimatedEffects) != 0 ){
 
     for(j in 1:nrow(estimatedEffects)) {
 
@@ -37,8 +41,9 @@ resultTable <- function(modelList){
 
     }
 
+      ModelResults <- cbind(ModelResults, t(CLTable))
 
-    ModelResults <- cbind(modelList$stability[i,], AReffects, t(CLTable))
+    }
 
     if(!is.null(modelList$ResidualCovariance$Syntax)){
 
@@ -64,10 +69,16 @@ resultTable <- function(modelList){
 
 
   ResultLabels <- c(paste0("Stability", colnames(modelList$stability)),
-                    paste0("AR", colnames(modelList$stability)),
-                    as.vector(apply(as.data.frame(CLName), 1,
-                                    function(x){paste0(x, c("", ".SE", ".Pvalue"))})))
+                    paste0("AR", colnames(modelList$stability)))
 
+
+  if( !is.null(CLTable) ){
+
+    ResultLabels <- c(ResultLabels,
+                      as.vector(apply(as.data.frame(CLName), 1,
+                                      function(x){paste0(x, c("", ".SE", ".Pvalue"))})))
+
+  }
 
   if( !is.null(modelList$ResidualCovariance$Syntax) ){
 
