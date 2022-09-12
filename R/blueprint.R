@@ -38,9 +38,6 @@ blueprint <- function(effects, use){
   # AR effects on the diagonal
   diag(blueprint) <- paste0("AR", use)
 
-  # Input CL effects along with information about whether they should be estimated
-  #   or constrained to 0 or some other value
-
   for( i in 1:nrow(effects) ){
 
     blueprint[effects[i, "predictor"], effects[i, "outcome"]] <- effects[i, "name"]

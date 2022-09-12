@@ -22,11 +22,13 @@ lavaanEq <- function(blueprint, S){
 
   outcomes <- colnames(blueprint)
 
-  #### Create Latent Variable Equations
-
   LatentEq <- NULL
   VarEq <- NULL
   CovEq <- NULL
+
+  # Create lavaan syntax to specify the phantom variables and their associated
+  # autoregressive and cross-lagged effects, and to specify and label
+  # variances and covariances
 
   for(i in 1: nrow(blueprint)){
 

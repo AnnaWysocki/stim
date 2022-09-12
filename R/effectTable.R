@@ -27,10 +27,14 @@
 
 effectTable <- function(model){
 
+  # Get a data frame with all the cross-lagged effects
   FullEffectTable <- lavaan::lavaanify(model)
   ClEffectTable <- FullEffectTable[FullEffectTable$op ==  "~", ]
 
   effects <- data.frame(predictor = 0, outcome = 0, name = 0, estimate = 0)
+
+  # Create an easier to interpret table with the same information as the
+  # effects object
 
   for(i in 1:nrow(ClEffectTable)){
 
@@ -57,6 +61,9 @@ effectTable <- function(model){
     }
   } # for loop ends
 
+  # Create a two objects. One with lavaan syntax to specify residual covariances
+  # and the other with a data frame (similar to the effects object) with information
+  # about the residual covariances
 
   ResidualCovariance <- FullEffectTable[FullEffectTable$op == "~~" &
                                           FullEffectTable$lhs != FullEffectTable$rhs,]

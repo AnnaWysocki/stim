@@ -66,14 +66,14 @@ resultTable <- function(modelList){
   ResultLabels <- c(paste0("Stability", colnames(modelList$stability)),
                     paste0("AR", colnames(modelList$stability)),
                     as.vector(apply(as.data.frame(CLName), 1,
-                                    function(x){paste0(x, c("", "_SE", "_Pvalue"))})))
+                                    function(x){paste0(x, c("", ".SE", ".Pvalue"))})))
 
 
   if( !is.null(modelList$ResidualCovariance$Syntax) ){
 
   ResultLabels <- c(ResultLabels,
                     as.vector(apply(as.data.frame(RcovName), 1,
-                                  function(x){paste0(x, c("", "_SE", "_Pvalue"))})))
+                                  function(x){paste0(x, c("", ".SE", ".Pvalue"))})))
 
   }
 

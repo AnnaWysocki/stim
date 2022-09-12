@@ -67,12 +67,16 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   # Checks for model input
   stopifnot("`model` must be a character element " = is.character(modelList$model))
 
+
+  # Create parameter tables with information about which cross-lag effects and
+  # which residual covariances should be estimated
+
   modelList <- c(modelList, effectTable(modelList$model))
 
   effects <- modelList$CLEffectTable
 
 
-  # Create list of variables to use
+  # Create list of variables that will be used in the STIM model
   use <- unique(c(effects$predictor, effects$outcome))
   use <- use[order(match(use, colnames(S)))]
 
@@ -119,6 +123,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   modelList$modelsEstimated <- nrow(stability)
 
+
   ################################
   ##  Check Degrees of Freedom  ##
   ################################
@@ -131,27 +136,39 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   if (modelList$q > df ) stop("The number of specified parameters to estimate are greater than the degrees of freedom.")
 
   #################
-  ##  Run Model  ##
+  ##  Fit Model  ##
   #################
 
   modelList$CLEffectTable$predictor <- paste0(modelList$CLEffectTable$predictor, "_0")
 
   ModelResults <- list()
 
+  # Create a blueprint/ symbolic beta matrix.
+  # This blueprint matrix will be used to specify which cross-lagged effects
+  # should be estimated and which should be constrained
+
   modelList$blueprint <- blueprint(modelList$CLEffectTable, use)
 
   modelList$modelWarning <- rep(0, nrow(modelList$stability))
+
+  # Users can specify multiple stability conditions.
+  # The stim function will estimate the STIM model for each
+  # stability condition
 
   for(i in 1: nrow(modelList$stability)){
 
     stabilityIndex <- modelList$stability[i, ]
 
+    # The modelImpliedEq() function returns model implied equations for the
+    # autoregressive effects and the phantom variable covariances.
+    # these equations are needed to fit a STIM model
     modelList <- c(modelList,
                    modelImpliedEq(S = S,
                                   blueprint = modelList$blueprint,
                                   stability = stabilityIndex,
                                   residualcov = modelList$ResidualCovariance))
 
+    # The lavaanEq() function returns the lavaan syntax for the STIM model
     LavaanSyntax <- lavaanEq(blueprint = modelList$blueprint,
                              S = S)
 
@@ -160,6 +177,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
       LavaanSyntax <- c(LavaanSyntax, modelList$ResidualCovariance$Syntax)
 
     }
+
 
     modelList$SIMSyntax <- c(LavaanSyntax, modelList$modelImpliedEquations)
 

@@ -33,9 +33,14 @@
 
 modelImpliedEq <- function(S, blueprint, stability, residualcov){
 
+  # Get symbolic covariance and psi matrices. Both symbolic matrices will
+  # be used to get model implied equations
   SymbolicMats <- symbMatrix(blueprint, residualcov)
 
   SymbolicCovMat <- SymbolicMats$SymbCov
+
+  # Matrix algebra with symbolic matrices to get model implied
+  # stability equations
 
   Psi <- Ryacas::ysym(SymbolicMats$Psi)
   B <- Ryacas::ysym(blueprint)
@@ -43,11 +48,13 @@ modelImpliedEq <- function(S, blueprint, stability, residualcov){
   Cov2 <- symbMultiplication(t(B), Cov1)
 
 
-
   StNames <- apply(as.matrix(colnames(blueprint)), 1, function(x){paste0("Cov", x, "0", x, "1")})
 
   ArEquations <- rep(0, length(StNames))
 
+  # We actually want the autoregressive equations which we can get by reorganizing
+  # the stability equations.
+  # We also need to input the user-specified stability values into these equations
   for(i in 1:length(StNames)){
 
     StEquations <- paste0(StNames[i], "==", Ryacas::diag(Cov2)[i])
@@ -61,7 +68,8 @@ modelImpliedEq <- function(S, blueprint, stability, residualcov){
   ArEquations <- gsub('{', "", ArEquations, fixed = TRUE)
   ArEquations <- gsub('}', "", ArEquations, fixed = TRUE)
 
-  # Covariance Equations
+  # Matrix algebra with symbolic matrices to get model implied
+  # phantom variable covariance equations
 
   Cov3 <- symbMultiplication(Cov2, B) + Psi
 
