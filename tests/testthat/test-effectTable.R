@@ -31,7 +31,8 @@ test_that("residual covariance information is correct", {
   expect_null(effectTable(model1)$ResidualCovariance$Variables)
 
   expect_equal(effectTable(model2)$ResidualCovariance$Syntax, 'Y~~RCovYX*X')
-  expect_equal(effectTable(model2)$ResidualCovariance$Variables, data.frame(V1 = "Y", V2 = "X", name = "RCovYX"))
+  expect_equal(effectTable(model2)$ResidualCovariance$Variables, data.frame(V1 = "Y", V2 = "X", name = "RCovYX",
+                                                                            estimate = "Yes"))
 
   expect_equal(effectTable(model3)$ResidualCovariance$Syntax, effectTable(model2)$ResidualCovariance$Syntax)
   expect_equal(effectTable(model3)$ResidualCovariance$Variables, effectTable(model2)$ResidualCovariance$Variables)
@@ -43,7 +44,8 @@ test_that("residual covariance information is correct", {
                                                                 'X~~RCovXM*M'))
   expect_equal(effectTable(model4)$ResidualCovariance$Variables,
                data.frame(V1 = c("Y", "L", "X"), V2 = c("X", "M", "M"),
-                          name = c("RCovYX", "RCovLM", "RCovXM")))
+                          name = c("RCovYX", "RCovLM", "RCovXM"),
+                          estimate = c("Yes", "Yes", "Yes")))
   })
 
 test_that("effect table is correct", {
