@@ -6,7 +6,7 @@
 #' @return A result table
 #' @keywords internal
 
-print.SIModel <- function(out, digits = 2){
+print.stim <- function(out, digits = 2){
 
 
   printMatrix <- out$ResultMatrix
@@ -19,4 +19,3 @@ print.SIModel <- function(out, digits = 2){
   print(printMatrix)
 
 }
-

@@ -206,7 +206,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   class(out) = "stim"
 
-  print(out)
+  #print.stim(out)
 
   return(out)
 
