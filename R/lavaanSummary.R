@@ -23,15 +23,18 @@ lavaanSummary <- function(x, subset = NULL){
 
   if(is.null(subset)){
     for(i in 1:length(x$lavaanObjects)){
-
-      print(lavaan::summary(x$lavaanObjects[[i]]))
+      lavaan::summary(x$lavaanObjects[[i]])
     }}else{
 
       for(i in 1:length(subset)){
 
-        print(lavaan::summary(x$lavaanObjects[[subset[i]]]))
+        lavaan::summary(x$lavaanObjects[[subset[i]]])
 
 
       }
 
     }}
+
+
+
+
