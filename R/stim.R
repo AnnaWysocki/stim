@@ -152,6 +152,8 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   modelList$CLEffectTable$predictor <- paste0(modelList$CLEffectTable$predictor, "_0")
 
   ModelResults <- list()
+  modelImpliedEquations <- list()
+  SIMSyntax <- list()
 
   # Create a blueprint/ symbolic beta matrix.
   # This blueprint matrix will be used to specify which cross-lagged effects
@@ -172,11 +174,11 @@ stim <- function(data = NULL, S = NULL, n = NULL,
     # The modelImpliedEq() function returns model implied equations for the
     # autoregressive effects and the phantom variable covariances.
     # these equations are needed to fit a STIM model
-    modelList <- c(modelList,
-                   modelImpliedEq(S = S,
+
+    modelImpliedEquations[[i]] <- modelImpliedEq(S = S,
                                   blueprint = modelList$blueprint,
                                   stability = stabilityIndex,
-                                  residualcov = modelList$ResidualCovariance))
+                                  residualcov = modelList$ResidualCovariance)$modelImpliedEquations
 
     # The lavaanEq() function returns the lavaan syntax for the STIM model
     LavaanSyntax <- lavaanEq(blueprint = modelList$blueprint,
@@ -189,10 +191,10 @@ stim <- function(data = NULL, S = NULL, n = NULL,
     }
 
 
-    modelList$SIMSyntax <- c(LavaanSyntax, modelList$modelImpliedEquations)
+    SIMSyntax[[i]] <- c(LavaanSyntax, modelImpliedEquations[[i]])
 
 
-    ModelResults[[i]] <- try(lavaan::sem(modelList$SIMSyntax, sample.cov = S, sample.nobs= n,
+    ModelResults[[i]] <- try(lavaan::sem(SIMSyntax[[i]], sample.cov = S, sample.nobs= n,
                                          std.lv = TRUE), silent = TRUE)
 
     modelList$modelWarning[i] <- lavaan::inspect( ModelResults[[i]], what = "post.check")
@@ -200,6 +202,8 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   }
 
   modelList$lavaanObjects <- ModelResults
+  modelList$SIMSyntax <- SIMSyntax
+  modelList$modelImpliedEquations <- modelImpliedEquations
 
   ResultMatrix <- resultTable(modelList)
 
