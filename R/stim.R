@@ -39,9 +39,6 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
     stopifnot("`data` must be a dataframe " = is.data.frame(data))
 
-    n <- nrow(data)
-    S <- stats::cov(data)
-
   }
 
   # Checks for S input
@@ -60,12 +57,11 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   }
 
-  modelList <- list(model = model,
-                    S = S,
-                    n = n)
 
   # Checks for model input
-  stopifnot("`model` must be a character element " = is.character(modelList$model))
+  stopifnot("`model` must be a character element " = is.character(model))
+
+  modelList <- list(model = model)
 
 
   # Create parameter tables with information about which cross-lag effects and
@@ -81,6 +77,20 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   use <- use[order(match(use, colnames(S)))]
 
   modelList$p <- length(use)
+
+  if( !is.null(data)){
+
+    stopifnot("`data` must be a dataframe " = is.data.frame(data))
+
+    n <- nrow(data)
+
+    data <- data[ , use]
+    S <- stats::cov(data)
+
+  }
+
+  modelList$S <- S
+  modelList$n <- n
 
   if( any(is.na(match(use, colnames(S)))) == TRUE ) {
 
