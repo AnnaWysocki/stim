@@ -83,11 +83,14 @@ resultTable <- function(modelList){
 
   }
 
-  if( !is.null(RCovestimatedEffects) ){
+  if( !is.null(RCovestimatedEffects)){
+
+    if(nrow(RCovestimatedEffects) != 0 ){
 
   ResultLabels <- c(ResultLabels,
                     as.vector(apply(as.data.frame(RcovName), 1,
                                   function(x){paste0(x, c("", ".SE", ".Pvalue"))})))
+    }
 
   }
 
