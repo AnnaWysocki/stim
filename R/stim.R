@@ -119,6 +119,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   }
 
+
   if(is.null(names(stability))){
     stop("The `stability` input must be named")
   }
@@ -128,6 +129,10 @@ stim <- function(data = NULL, S = NULL, n = NULL,
     stop("The `stability` input names don't match the variable names")
 
   }
+
+  # put stability values in the same order as the data input columns
+
+  stability <- stability[use]
 
   modelList$stability <- stability
 
@@ -160,6 +165,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   # should be estimated and which should be constrained
 
   modelList$blueprint <- blueprint(modelList$CLEffectTable, use)
+
 
   modelList$modelWarning <- rep(0, nrow(modelList$stability))
 
