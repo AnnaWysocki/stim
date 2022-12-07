@@ -11,6 +11,7 @@ resultTable <- function(modelList){
 
   CLMatrixList <- NULL
   RCovMatrixList <- NULL
+  ARVectorList <- NULL
 
 
   for(i in 1:modelList$modelsEstimated){
@@ -37,12 +38,13 @@ resultTable <- function(modelList){
 
     CLMatrixList[[i]] <- CLMatrix
     RCovMatrixList[[i]] <- RCovMatrix
+    ARVectorList[[i]] <- AReffects
   }
 
-  names(CLMatrixList) <- names(RCovMatrixList) <- paste0("Model", 1:modelList$modelsEstimated)
+  names(CLMatrixList) <- names(RCovMatrixList) <- names(ARVectorList) <- paste0("Model", 1:modelList$modelsEstimated)
 
 
-  return(list(CLMatrixList = CLMatrixList, RCovMatrixList = RCovMatrixList))
+  return(list(CLMatrixList = CLMatrixList, RCovMatrixList = RCovMatrixList, ARVectorList = ARVectorList))
 }
 
 
