@@ -150,6 +150,8 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   if (modelList$q > df ) stop("The number of specified parameters to estimate are greater than the degrees of freedom.")
 
+  modelList$df <- df
+
   #################
   ##  Fit Model  ##
   #################
@@ -211,11 +213,16 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   modelList$SIMSyntax <- SIMSyntax
   modelList$modelImpliedEquations <- modelImpliedEquations
 
-  ResultMatrix <- resultTable(modelList)
+  Results <- resultTable(modelList)
 
-  out <- list(stability = modelList$stability,
+  out <- list(n = modelList$n,
+              p = modelList$p,
+              q = modelList$q,
+              df = modelList$df,
+              stability = modelList$stability,
               CLEffectTable = modelList$CLEffectTable,
-              ResultMatrix = ResultMatrix,
+              CLMatrices = Results$CLMatrixList,
+              RCovMatrices = Results$RCovMatrixList,
               lavaanObjects = modelList$lavaanObjects,
               NoWarnings = as.logical(modelList$modelWarning),
               CSModelSyntax = modelList$model,
