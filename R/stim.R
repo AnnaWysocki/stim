@@ -234,8 +234,120 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   class(out) = "stim"
 
-  #print.stim(out)
+  print.stim(out)
 
   return(out)
+
+}
+
+
+
+#' @title Summary method for \code{stim} objects
+#'
+#' @name summary.stim
+#'
+#' @description Summarize a set of Stability Informed Models
+#'
+#' @param out An object of class \code{stim}
+#'
+#' @seealso \code{\link{stim}}
+#'
+#' @return A print out containing the results for a set of Stability Informed Models
+#'
+#' @examples
+#' \donttest{
+#' S <- matrix(.3, 5, 5)
+#' diag(S) <- 1
+#' set.seed(69)
+#' example_data <- as.data.frame(MASS::mvrnorm(n = 300, mu = rep(0, 5), Sigma = S,))
+#'
+#' model <- 'X5 ~ X4 + X3'
+#' stability <- c(X3 = .3, X4 = .2, X5 = .1)
+#'
+#' modelFit <- stim(data = example_data, model = model, stability = stability)
+#'
+#' summary(modelFit)
+#'}
+#'
+#' @export
+summary.stim <- function(out){
+
+
+  cat("StIM: Stability Informed Models \n")
+
+  cat("-------------------------------------\n")
+  cat("-------------------------------------\n")
+
+  cat("\n")
+  cat("Variables (p):", out$p, "\n")
+  cat("Sample Size (n):", out$n, "\n")
+  cat("Estimated Parameters (q):", out$q, "\n")
+  cat("Degrees of Freedom:", out$df, "\n")
+
+  cat("\n")
+
+  cat("-------------------------------------\n")
+
+
+  for(i in 1:nrow(out$stability)){
+
+    cat("Model", i, "\n")
+    cat("\n")
+
+    if(out$NoWarnings[i] == FALSE){
+      cat("Model" ,i, "produced an error or warning! \n")
+    }
+
+    cat("Stability:\n")
+    print(out$stability[i, ], row.names =  FALSE)
+
+    cat("\n Autoregressive Effects:\n")
+    print(out$ARVector[[i]], row.names =  FALSE)
+
+    cat("\n Cross Lagged Effects:\n")
+    print(out$CLMatrices[[i]], row.names =  FALSE)
+
+    cat("\n Residual Covariances:\n")
+    print(out$RCovMatrices[[i]], row.names =  FALSE)
+
+    cat("\n-------------------------------------\n ")
+
+  }
+
+
+
+}
+
+
+#' stim print function
+#'
+#' @param out A stim object
+
+#'
+#' @return Overview of model
+#' @keywords internal
+
+print.stim <- function(out){
+
+  cat("StIM: Stability Informed Models \n")
+
+  cat("-------------------------------------\n")
+  cat("-------------------------------------\n")
+
+  cat("\n")
+  cat("Variables (p):", out$p, "\n")
+  cat("Sample Size (n):", out$n, "\n")
+  cat("Estimated Parameters (q):", out$q, "\n")
+  cat("Degrees of Freedom:", out$df, "\n")
+
+  cat("Number of Models Estimated:", nrow(out$stability), "\n")
+
+  if(out$NoWarnings[i] == FALSE){
+    cat("Model(s)", which(out$NoWarnings == FALSE), "produced an error or warning! \n")
+  }
+
+  cat("\n")
+
+  cat("-------------------------------------\n")
 
 }
