@@ -37,16 +37,18 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   # Checks for data input
   if( !is.null(data)){
 
-    stopifnot("`data` must be a dataframe " = is.data.frame(data))
+    stopifnot("input for `data` argument must be a dataframe " = is.data.frame(data))
+
+    stopifnot("input for `data` argument must have column names" = !is.null(colnames(data)))
 
   }
 
   # Checks for S input
   if( !is.null(S)){
 
-    stopifnot("`S` must be a matrix" = is.matrix(S))
+    stopifnot("input for `S` argument must be a matrix" = is.matrix(S))
 
-    stopifnot("`S` must be symmetric" = isSymmetric(S))
+    stopifnot("input for `S` argument must be a symmetric covariance matrix" = isSymmetric(S))
 
   }
 
@@ -74,7 +76,6 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
   # Create list of variables that will be used in the STIM model
   use <- unique(c(effects$predictor, effects$outcome))
-  use <- use[order(match(use, colnames(S)))]
 
   modelList$p <- length(use)
 
@@ -85,7 +86,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
     n <- nrow(data)
 
     data <- data[ , use]
-    S <- stats::cov(data)
+    S <- stats::cov(data, use = "pairwise.complete.obs")
 
   }
 
