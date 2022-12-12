@@ -55,6 +55,17 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   # Checks for n input
   if( !is.null(n)){
 
+    stopifnot("input for `n` argument must be a vector" = is.vector(n))
+
+    if(length(n) != 1){
+
+      warning(paste0("input for `n` argument has length of ", length(n),
+                    ". Only the first element will be used."))
+
+      n <- n[1]
+    }
+
+
     stopifnot("`n` must be numeric" = is.numeric(n))
 
   }
@@ -77,6 +88,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   # Create list of variables that will be used in the STIM model
   use <- unique(c(effects$predictor, effects$outcome))
 
+
   modelList$p <- length(use)
 
   if( !is.null(data)){
@@ -85,20 +97,37 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 
     n <- nrow(data)
 
+
+    # Check that variables in model input and data input match
+    if( any(is.na(match(use, colnames(data)))) == TRUE ) {
+
+      stop("Variable labels in the model input do not match the
+          column names in the data input")
+    }
+
     data <- data[ , use]
     S <- stats::cov(data, use = "pairwise.complete.obs")
 
   }
 
+  if( !is.null(S)){
+
+    # Check that variables in model input and S input match
+    if( any(is.na(match(use, colnames(S)))) == TRUE ) {
+
+      stop("Variable labels in the model input do not match the
+          column names in the S input")
+    }
+
+  }
+
+
+
+  #use <- use[order(match(use, colnames(S)))]
   modelList$S <- S
   modelList$n <- n
 
-  if( any(is.na(match(use, colnames(S)))) == TRUE ) {
 
-    stop("Variable names in the effects object do not match the variable
-          names in the dataset/covariance matrix")
-
-  }
 
 
   # Checks for stability input
@@ -113,6 +142,8 @@ stim <- function(data = NULL, S = NULL, n = NULL,
     stability <- as.data.frame(t(stability))
 
   }
+
+  stopifnot('Elements in `stability` input must be numeric' = apply(stability, 1, is.numeric))
 
   if(ncol(stability) != length(use)){
 
@@ -145,13 +176,13 @@ stim <- function(data = NULL, S = NULL, n = NULL,
   ################################
 
   p <- length(use)
-  df <- (p * (p-1)) /2
+  pstar <- (p * (p-1)) /2
 
   modelList$q <- sum(effects$estimate == "Yes", modelList$ResidualCovariance$Variables$estimate == "Yes")
 
-  if (modelList$q > df ) stop("The number of specified parameters to estimate are greater than the degrees of freedom.")
-
-  modelList$df <- df
+  if (modelList$q > pstar ) stop(paste0("stim can estimate ", pstar, " parameters. `model` input specifies that ", modelList$q,
+                                     " parameters should be estimated."))
+  modelList$df <- pstar - modelList$q
 
   #################
   ##  Fit Model  ##
