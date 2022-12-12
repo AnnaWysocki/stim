@@ -1,6 +1,6 @@
 #' Outputs Lavaan Summary
 #'
-#' @param x a SIModel Object
+#' @param x a stim Object
 #' @param subset Specify which model(s) you would like summarized. Default is to output all estimated models
 #'
 #' @return Lavaan summary table
@@ -23,12 +23,13 @@ lavaanSummary <- function(x, subset = NULL){
 
   if(is.null(subset)){
     for(i in 1:length(x$lavaanObjects)){
-      lavaan::summary(x$lavaanObjects[[i]])
+      cat(paste("Model", i, "\n"))
+      print(lavaan::summary(x$lavaanObjects[[i]]))
     }}else{
 
       for(i in 1:length(subset)){
 
-        lavaan::summary(x$lavaanObjects[[subset[i]]])
+        print(lavaan::summary(x$lavaanObjects[[subset[i]]]))
 
 
       }

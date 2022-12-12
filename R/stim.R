@@ -260,8 +260,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
               NoWarnings = as.logical(modelList$modelWarning),
               CSModelSyntax = modelList$model,
               SIMSyntax = modelList$SIMSyntax,
-              modelImpliedEquations = modelList$modelImpliedEquations,
-              SymbolicMatrices = modelList$SymbolicMatrices)
+              modelImpliedEquations = modelList$modelImpliedEquations)
 
 
   class(out) = "stim"
@@ -340,8 +339,11 @@ summary.stim <- function(object, ...){
     cat("\n Cross Lagged Effects:\n")
     print(object$CLMatrices[[i]], row.names =  FALSE)
 
+    if(nrow(object$RCovMatrices[[1]]) != 0){
+
     cat("\n Residual Covariances:\n")
     print(object$RCovMatrices[[i]], row.names =  FALSE)
+    }
 
     cat("\n-------------------------------------\n ")
 
