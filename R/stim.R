@@ -248,14 +248,15 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 #'
 #' @description Summarize a set of Stability Informed Models
 #'
-#' @param out An object of class \code{stim}
+#' @param object An object of class \code{stim}
 #'
+#' @param ... Not used
 #' @seealso \code{\link{stim}}
 #'
 #' @return A print out containing the results for a set of Stability Informed Models
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' S <- matrix(.3, 5, 5)
 #' diag(S) <- 1
 #' set.seed(69)
@@ -270,7 +271,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 #'}
 #'
 #' @export
-summary.stim <- function(out){
+summary.stim <- function(object, ...){
 
 
   cat("StIM: Stability Informed Models \n")
@@ -279,36 +280,36 @@ summary.stim <- function(out){
   cat("-------------------------------------\n")
 
   cat("\n")
-  cat("Variables (p):", out$p, "\n")
-  cat("Sample Size (n):", out$n, "\n")
-  cat("Estimated Parameters (q):", out$q, "\n")
-  cat("Degrees of Freedom:", out$df, "\n")
+  cat("Variables (p):", object$p, "\n")
+  cat("Sample Size (n):", object$n, "\n")
+  cat("Estimated Parameters (q):", object$q, "\n")
+  cat("Degrees of Freedom:", object$df, "\n")
 
   cat("\n")
 
   cat("-------------------------------------\n")
 
 
-  for(i in 1:nrow(out$stability)){
+  for(i in 1:nrow(object$stability)){
 
     cat("Model", i, "\n")
     cat("\n")
 
-    if(out$NoWarnings[i] == FALSE){
+    if(object$NoWarnings[i] == FALSE){
       cat("Model" ,i, "produced an error or warning! \n")
     }
 
     cat("Stability:\n")
-    print(out$stability[i, ], row.names =  FALSE)
+    print(object$stability[i, ], row.names =  FALSE)
 
     cat("\n Autoregressive Effects:\n")
-    print(out$ARVector[[i]], row.names =  FALSE)
+    print(object$ARVector[[i]], row.names =  FALSE)
 
     cat("\n Cross Lagged Effects:\n")
-    print(out$CLMatrices[[i]], row.names =  FALSE)
+    print(object$CLMatrices[[i]], row.names =  FALSE)
 
     cat("\n Residual Covariances:\n")
-    print(out$RCovMatrices[[i]], row.names =  FALSE)
+    print(object$RCovMatrices[[i]], row.names =  FALSE)
 
     cat("\n-------------------------------------\n ")
 
@@ -342,7 +343,7 @@ print.stim <- function(out){
 
   cat("Number of Models Estimated:", nrow(out$stability), "\n")
 
-  if(out$NoWarnings[i] == FALSE){
+  if(any(out$NoWarnings) == FALSE){
     cat("Model(s)", which(out$NoWarnings == FALSE), "produced an error or warning! \n")
   }
 
