@@ -73,8 +73,8 @@ dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1), Z = rnorm(500, 0, 
 test_that("Not specifying proper data inputs throws an error", {
 
   expect_error(stim(S = sampleCov2, model = model2 , stability = stability2))
-  expect_error(stim(n = 1000, effects = model2, stability = stability2))
-  expect_error(stim(S = sampleCov2, n = "one thousand", effects = model2, stability = stability2))
+  expect_error(stim(n = 1000, model = model2, stability = stability2))
+  expect_error(stim(S = sampleCov2, n = "one thousand", model = model2, stability = stability2))
 
 })
 

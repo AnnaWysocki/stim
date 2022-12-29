@@ -7,7 +7,7 @@
 lavaanSummary(x, subset = NULL)
 }
 \arguments{
-\item{x}{a SIModel Object}
+\item{x}{a stim Object}
 
 \item{subset}{Specify which model(s) you would like summarized. Default is to output all estimated models}
 }
