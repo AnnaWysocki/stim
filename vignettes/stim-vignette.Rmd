@@ -39,12 +39,11 @@ library(stim)
 
 S <-  matrix(c(1, .3, .3,
               .3,  1, .3,
-              .3, .3,  1), nrow = 3, ncol = 3)
-example_data <- as.data.frame(MASS::mvrnorm(n = 300, mu = rep(0, 3), Sigma =  S,
-                              empirical = TRUE))
+              .3, .3,  1), 
+             nrow = 3, ncol = 3,
+             dimnames = list(c("X", "Y", "Z"), 
+                             c("X", "Y", "Z")))
 
-# Add column names to dataset
-colnames(example_data) <- c("X", "Y", "Z")
 
 ```
 
@@ -154,16 +153,10 @@ If this is the `stability` input, two models will be estimated. One model where 
 ### Estimate the Stability Informed Model 
 
 ```{r stim1}
-modelFit <- stim(data = example_data, model = model2, stability = stability) 
+modelFit <- stim(S = S, n = 1000, model = model2, stability = stability) 
 
 ```
 
-Instead of the data input, I could also use the covariance matrix and sample size inputs. 
-
-```{r stim2, eval = FALSE}
-modelFit <- stim(S = cov(example_data), n = nrow(example_data), model = model2, stability = stability) 
-
-```
 
 Some information about the model(s) is automatically printed out when the stim() function is run. 
 The summary() function can be used to print out more information 
