@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml/badge.svg)](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml)
+[![R-CMD-check](https://github.com/AnnaWysocki/stim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AnnaWysocki/stim/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 # stim
 
 The **stim** package fits the Stability Informed Model which incorporates variable stability--how a variable correlates with future versions of itself--into cross-sectional estimates.
