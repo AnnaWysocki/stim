@@ -1,6 +1,6 @@
 Package: stim
 Title: Incorporating Stability Information into Cross-Sectional Estimates
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person("Anna", "Wysocki", , "awysocki@ucdavis.edu", role = c("aut", "cre"))
 Description: The goal of 'stim' is to provide a function for estimating the Stability Informed Model. The Stability Informed Model integrates stability information (how much a variable correlates with itself in the future) into cross-sectional estimates. 
