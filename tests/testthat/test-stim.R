@@ -1,5 +1,4 @@
 # Function for creating a sample covariance matrix with known properties
-
 GetSampleCov <- function(B, ResidualCov){# Beta Matrix needs to be in regression format
   # rows are causes and columns are effects
 
@@ -32,30 +31,35 @@ GetSampleCov <- function(B, ResidualCov){# Beta Matrix needs to be in regression
     rownames(Sigma2) <- colnames(Sigma2) <- colnames(B)
 
     return(Sigma2)} else{print("Non-stationary")}
-}
+} # B: True Beta Matrix
+                                              # ResidualCov: True Psi Matrix
 
 
-#######################################
-#  Tests when no residual covariance  #
-#######################################
+########################################
+#  Tests Without Residual Covariances  #
+########################################
 
 # 2 variable set up
-BPop2 <- matrix(c(.3,.3,
-                  0,.3), ncol = 2, nrow = 2, byrow = TRUE)
-colnames(BPop2 ) <- c("X", "Y")
-rownames(BPop2 ) <- c("X_0", "Y_0")
+BPop2 <- matrix(c( .3,.3,
+                   0,.3 ),
+                ncol = 2, nrow = 2, byrow = TRUE,
+                dimnames = list( c("X_0", "Y_0"),
+                                  c("X", "Y")     ))
+
 sampleCov2 <- GetSampleCov(BPop2, data.frame("X", "Y", 0))
 
 model2 <-  'Y ~ X'
-stability <- data.frame(X = .3, Y = 0.33)
+stability2 <- data.frame(X = .3, Y = 0.33)
 
 
 # 3 variable set up
-BPop3 <- matrix(c(.3,.3, .3,
-                  0,.3, .3,
-                  0, 0, .3), ncol = 3, nrow = 3, byrow = TRUE)
-colnames(BPop3) <- c("X", "Y", "Z")
-rownames(BPop3) <- c("X_0", "Y_0", "Z_0")
+BPop3 <- matrix(c( .3,.3, .3,
+                    0,.3, .3,
+                    0, 0, .3 ),
+                ncol = 3, nrow = 3, byrow = TRUE,
+                dimnames = list( c("X_0", "Y_0", "Z_0"),
+                                 c("X", "Y", "Z")       ))
+
 sampleCov3 <- GetSampleCov(BPop3, data.frame("X", "Y", 0))
 
 
@@ -66,33 +70,75 @@ stability3 <- data.frame(X = .3, Y = 0.33, Z = .4)
 
 
 # data setup
-dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1), Z = rnorm(500, 0, 1))
+dat <- data.frame(Y = rnorm(500, 0, 1),
+                  X = rnorm(500, 0, 1),
+                  Z = rnorm(500, 0, 1))
 
 
-# tests
+# start tests
 test_that("Not specifying proper data inputs throws an error", {
 
   expect_error(stim(S = sampleCov2, model = model2 , stability = stability2))
   expect_error(stim(n = 1000, model = model2, stability = stability2))
-  expect_error(stim(S = sampleCov2, n = "one thousand", model = model2, stability = stability2))
+  expect_error(stim(S = sampleCov2, n = "one thousand", model = model2,
+                    stability = stability2))
 
 })
 
 
 test_that("stim function returns correct solution with 2 variables", {
 
-  ModelFit2 <- stim(S = sampleCov2, n = 1000, model = model2, stability = stability)
-  lavaanSolution2 <- t(round(lavaan::inspect(ModelFit2$lavaanObjects[[1]], what = "std")$lambda, 1))
+  ModelFit2 <- stim(S = sampleCov2, n = 1000, model = model2, stability = stability2)
+  lavaanSolution2 <- t(round(lavaan::inspect(ModelFit2$lavaanObjects[[1]], what = "std")$lambda, 2))
   expect_equal(unclass(lavaanSolution2), BPop2)
 })
 
+test_that("fixing values rather than estimating works with 2 variables", {
+  model2fix <- c('Y ~ .3 * X
+                 Y ~~ X')
+
+  ModelFit2Fix <- stim(S = sampleCov2, n = 1000, model = model2fix, stability = stability2)
+  lavaanSolution2Fix <- t(round(lavaan::inspect(ModelFit2Fix$lavaanObjects[[1]], what = "std")$lambda, 2))
+  expect_equal(unclass(lavaanSolution2Fix), BPop2)
+})
+
+
+test_that("stim function returns correct solution with 2 variables & multiple
+          stability conditions", {
+  stability2df <- data.frame(X = c(.3, .34), Y = c(0.33, .36))
+  ModelFit2 <- stim(S = sampleCov2, n = 1000, model = model2, stability = stability2df)
+  lavaanSolution2 <- t(round(lavaan::inspect(ModelFit2$lavaanObjects[[1]], what = "std")$lambda, 2))
+  lavaanSolution2Wrong <- t(round(lavaan::inspect(ModelFit2$lavaanObjects[[2]], what = "std")$lambda, 2))
+  expect_equal(unclass(lavaanSolution2), BPop2)
+  expect_error(expect_equal(unclass(lavaanSolution2Wrong), BPop2))
+})
 
 
 test_that("stim function returns correct solution with 3 variables", {
 
   ModelFit3 <- stim(S = sampleCov3, n = 1000, model = model3, stability = stability3)
-  lavaanSolution3 <- t(round(lavaan::inspect(ModelFit3$lavaanObjects[[1]], what = "std")$lambda, 1))
+  lavaanSolution3 <- t(round(lavaan::inspect(ModelFit3$lavaanObjects[[1]], what = "std")$lambda, 2))
   expect_equal(unclass(lavaanSolution3), BPop3)
+})
+
+test_that("stim function returns correct solution with 3 variables and multiple
+          stability conditions", {
+  stability3df <- data.frame(X = c(.3, .4), Y = c(0.33, .43), Z = c(.4, .45))
+
+  ModelFit3 <- stim(S = sampleCov3, n = 1000, model = model3, stability = stability3df)
+  lavaanSolution3 <- t(round(lavaan::inspect(ModelFit3$lavaanObjects[[1]], what = "std")$lambda, 2))
+  lavaanSolution3Wrong <- t(round(lavaan::inspect(ModelFit3$lavaanObjects[[2]], what = "std")$lambda, 2))
+  expect_equal(unclass(lavaanSolution3), BPop3)
+  expect_error(expect_equal(unclass(lavaanSolution3Wrong), BPop3))
+})
+
+test_that("fixing values rather than estimating works with 3 variables", {
+  model3fix <- 'Y ~ X
+            Z ~ .3 * X + Y'
+
+  ModelFit3Fix <- stim(S = sampleCov3, n = 1000, model = model3fix, stability = stability3)
+  lavaanSolution3Fix <- t(round(lavaan::inspect(ModelFit3Fix$lavaanObjects[[1]], what = "std")$lambda, 2))
+  expect_equal(unclass(lavaanSolution3Fix), BPop3)
 })
 
 
@@ -106,56 +152,45 @@ test_that("If the number of estimated parameters exceeds degrees of freedom, fun
 
 
 #######################################
-#   Tests when residual covariance    #
+#   Tests With Residual Covariance    #
 #######################################
 
 # 2 variable set up
-BPop2 <- matrix(c(.3,.3,
-                  0,.3), ncol = 2, nrow = 2, byrow = TRUE)
-colnames(BPop2 ) <- c("X", "Y")
-rownames(BPop2 ) <- c("X_0", "Y_0")
-sampleCov2 <- GetSampleCov(BPop2, data.frame("X", "Y", .1))
 
-model2 <-  'Y ~ .3 * X
-            X ~~  Y'
-stability <- data.frame(X = .3, Y = 0.363)
+sampleCov2Rcov <- GetSampleCov(BPop2, data.frame("X", "Y", .1))
+
+model2Rcov <-  'Y ~ .3 * X
+                X ~~  Y'
+stability2Rcov <- data.frame(X = .3, Y = 0.363)
 
 
 # 3 variable set up
-BPop3 <- matrix(c(.3,.3, .3,
-                  0,.3, .3,
-                  0, 0, .3), ncol = 3, nrow = 3, byrow = TRUE)
-colnames(BPop3) <- c("X", "Y", "Z")
-rownames(BPop3) <- c("X_0", "Y_0", "Z_0")
-sampleCov3 <- GetSampleCov(BPop3, data.frame("X", "Y", .05))
+sampleCov3Rcov <- GetSampleCov(BPop3, data.frame("X", "Y", .05))
 
 
-model3 <-  'Y ~ .3 *X
-            Z ~ X + Y
-            X ~~ Y'
-stability3 <- data.frame(X = .3, Y = 0.346, Z = .406)
+model3Rcov <-  'Y ~ .3 *X
+                Z ~ X + Y
+                X ~~ Y'
+stability3Rcov <- data.frame(X = .3, Y = 0.346, Z = .406)
 
 
 
-# data setup
-dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1), Z = rnorm(500, 0, 1))
 
-
-# tests
+# start tests
 
 test_that("stim function returns correct solution with 2 variables & covarying residual", {
 
-  ModelFit2 <- stim(S = sampleCov2, n = 1000, model = model2, stability = stability)
-  lavaanSolution2 <- t(round(lavaan::inspect(ModelFit2$lavaanObjects[[1]], what = "std")$lambda, 1))
-  expect_equal(unclass(lavaanSolution2), BPop2)
+  ModelFit2Rcov <- stim(S = sampleCov2Rcov, n = 1000, model = model2Rcov, stability = stability2Rcov)
+  lavaanSolution2Rcov <- t(round(lavaan::inspect(ModelFit2Rcov$lavaanObjects[[1]], what = "std")$lambda, 1))
+  expect_equal(unclass(lavaanSolution2Rcov), BPop2)
 })
 
 
 test_that("stim function returns correct solution with 3 variables", {
 
-  ModelFit3 <- stim(S = sampleCov3, n = 1000, model = model3, stability = stability3)
-  lavaanSolution3 <- t(round(lavaan::inspect(ModelFit3$lavaanObjects[[1]], what = "std")$lambda, 1))
-  expect_equal(unclass(lavaanSolution3), BPop3)
+  ModelFit3Rcov <- stim(S = sampleCov3Rcov, n = 1000, model = model3Rcov, stability = stability3Rcov)
+  lavaanSolution3Rcov <- t(round(lavaan::inspect(ModelFit3Rcov$lavaanObjects[[1]], what = "std")$lambda, 1))
+  expect_equal(unclass(lavaanSolution3Rcov), BPop3)
 
 })
 
