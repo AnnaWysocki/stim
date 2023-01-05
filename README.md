@@ -1,23 +1,25 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-The `stim` package fits the Stability Informed Model which incorporates
-variable stability–how a variable correlates with future versions of
-itself–into cross-sectional estimates. Assuming the process is
-stationary, the model is specified correctly, and the stability values
-are correct, the Stability Informed Model can estimate parameters that
-are unbiased for cross-lagged (longitudinal) effects even when only
+# stim
+
+The **stim** package fits the Stability Informed Model which
+incorporates variable stability–how a variable correlates with future
+versions of itself–into cross-sectional estimates. Assuming the process
+is stationary, the model is specified correctly, and the stability
+values are correct, the Stability Informed Model can estimate parameters
+that are unbiased for cross-lagged (longitudinal) effects when only
 cross-sectional data are available.
 
 For more information on the Stability Informed Model see
 <https://psyarxiv.com/vg5as>
 
 This tutorial outlines how to estimate a Stability Informed Model using
-the `stim` package within an SEM framework.
+the **stim** package within an SEM framework.
 
 ## Installation
 
-You can install the development version of `stim` from GitHub with
+You can install the development version of **stim** from GitHub with
 
 ``` r
 devtools::install_github("https://github.com/AnnaWysocki/stim")
@@ -38,7 +40,7 @@ example_data <- as.data.frame(MASS::mvrnorm(n = 300, mu = rep(0, 3), Sigma =  S,
 colnames(example_data) <- c("X", "Y", "Z")
 ```
 
-## `stim` Function Overview
+## stim Function Overview
 
 Estimate a single or a set of Stability Informed Models using the
 `stim()` function.
@@ -66,9 +68,8 @@ model in lavaan (See <https://lavaan.ugent.be/tutorial/tutorial.pdf> for
 information on lavaan syntax).
 
 This input determines what parameters/effects are estimated. Note, the
-Stability Informed model can estimate a maximum of $$
-\frac{p (p-1)}{2}
-$$ parameters (where p is the number of measured variables). These
+Stability Informed Model can estimate a maximum of (p \* (p -1))/2
+parameters (where p is the number of measured variables). These
 parameters can be, for example, cross-lagged effects or residual
 covariances.
 
@@ -135,8 +136,8 @@ X, Y, and Z.
 stability <- c(X = .5, Y = .1, Z = .1)
 ```
 
-The stability values need to be named, and the names must match the
-variable names in the `data` or `S` input.
+The elements or columns in the stability object need to be named, and
+the names must match the variable names in the `data` or `S` input.
 
 Multiple stability values can be specified for each variable. This
 results in multiple Stability Informed Models being estimated (one for
@@ -181,8 +182,10 @@ modelFit <- stim(S = cov(example_data), n = nrow(example_data), model = model2, 
 ```
 
 Some information about the model(s) is automatically printed out when
-the stim() function is run. The summary() function can be used to print
-out more information
+the `stim()` function is run. The output from this function is an object
+of type `stim`. When the `summary()` function is used on a `stim`
+object, a summary of the estimated Stability Informed Models will be
+printed.
 
 ``` r
 summary(modelFit)
@@ -204,7 +207,7 @@ summary(modelFit)
 #> 
 #>  Autoregressive Effects:
 #>         ARX         ARY         ARZ 
-#>  0.50083543 -0.07953266 -0.24509194 
+#>  0.50083541 -0.07953269 -0.24509203 
 #> 
 #>  Cross Lagged Effects:
 #>   Effect Estimate Standard.Error P.Value
@@ -224,12 +227,12 @@ summary(modelFit)
 #> 
 #>  Autoregressive Effects:
 #>         ARX         ARY         ARZ 
-#>  0.55091896 -0.02944912 -0.16022875 
+#>  0.55091896 -0.02944912 -0.16022917 
 #> 
 #>  Cross Lagged Effects:
 #>   Effect Estimate Standard.Error P.Value
 #>  Effect1    0.330          0.643   0.608
-#>     CLYZ    0.874          3.049   0.775
+#>     CLYZ    0.874          3.049   0.774
 #> 
 #>  Residual Covariances:
 #>  Effect Estimate Standard.Error P.Value
@@ -239,10 +242,10 @@ summary(modelFit)
 #> 
 ```
 
-### Eploring the stim Output Object
+### Eploring the `stim` Output Object
 
-modelFit is a stim object that contains a list of objects with
-information for the Stability Informed Model
+The object `modelFit` contains a list with information for the Stability
+Informed Model
 
 - n: Sample size
 - p: Number of measured variables used in the Stability Informed Model
@@ -312,7 +315,7 @@ modelFit$CLMatrices
 #> $Model2
 #>    Effect Estimate Standard.Error P.Value
 #> 3 Effect1    0.330          0.643   0.608
-#> 6    CLYZ    0.874          3.049   0.775
+#> 6    CLYZ    0.874          3.049   0.774
 ```
 
 #### RCovMatrices
@@ -334,9 +337,6 @@ modelFit$RCovMatrices
 
 #### ARVector
 
-A list of vectors (1 for each Stability Informed Model that was
-estimated) with the values for the auto-regressive effects.
-
 A list of vectors with the values for each auto-regressive effect. Each
 vector corresponds to one of the estimated Stability Informed Models.
 
@@ -344,11 +344,11 @@ vector corresponds to one of the estimated Stability Informed Models.
 modelFit$ARVector
 #> $Model1
 #>         ARX         ARY         ARZ 
-#>  0.50083543 -0.07953266 -0.24509194 
+#>  0.50083541 -0.07953269 -0.24509203 
 #> 
 #> $Model2
 #>         ARX         ARY         ARZ 
-#>  0.55091896 -0.02944912 -0.16022875
+#>  0.55091896 -0.02944912 -0.16022917
 ```
 
 #### lavaanObjects
@@ -361,7 +361,7 @@ To output the lavaan object easily, you can use the
 ``` r
 lavaanSummary(modelFit)
 #> Model 1 
-#> lavaan 0.6-12 ended normally after 168 iterations
+#> lavaan 0.6-12 ended normally after 170 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -452,7 +452,7 @@ lavaanSummary(modelFit)
 #>   Y_0 =~                                              
 #>     X                 0.000                           
 #>     Y        (ARY)   -0.029    0.036   -0.816    0.415
-#>     Z       (CLYZ)    0.874    3.049    0.286    0.775
+#>     Z       (CLYZ)    0.874    3.049    0.286    0.774
 #>   Z_0 =~                                              
 #>     X                 0.000                           
 #>     Y                 0.000                           
@@ -492,7 +492,7 @@ argument.
 
 ``` r
 lavaanSummary(modelFit, subset = 1)
-#> lavaan 0.6-12 ended normally after 168 iterations
+#> lavaan 0.6-12 ended normally after 170 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -560,7 +560,7 @@ lavaanSummary(modelFit, subset = 1)
 A vector with logical information on whether there were any errors or
 warnings for each of the estimated models.
 
-FALSE means no warnings TRUE means warnings.
+TRUE means no warnings FALSE means warnings.
 
 ``` r
 modelFit$NoWarnings # Means no warnings for both models
