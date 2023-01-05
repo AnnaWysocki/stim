@@ -16,10 +16,6 @@ knitr::opts_chunk$set(
 
 # stim
 
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml/badge.svg)](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml)
-<!-- badges: end -->
-
 The **stim** package fits the Stability Informed Model which incorporates variable stability--how a variable correlates with future versions of itself--into cross-sectional estimates.
 Assuming the process is stationary, the model is specified correctly, and the stability values are correct, the Stability Informed Model can estimate parameters that are unbiased for cross-lagged (longitudinal) effects when only cross-sectional data are available. 
 
