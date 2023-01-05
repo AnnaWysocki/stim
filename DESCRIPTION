@@ -1,5 +1,5 @@
 Package: stim
-Title: Incorporating Stability Information into Cross-sectional Estimates
+Title: Incorporating Stability Information into Cross-Sectional Estimates
 Version: 0.0.0.9000
 Authors@R: 
     person("Anna", "Wysocki", , "awysocki@ucdavis.edu", role = c("aut", "cre"))
