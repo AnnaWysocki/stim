@@ -1,9 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- badges: start -->
 
-[![R-CMD-check](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml/badge.svg)](https://github.com/AnnaWysocki/stim/actions/workflows/r.yml)
-<!-- badges: end --> \# stim
+# stim
 
 The **stim** package fits the Stability Informed Model which
 incorporates variable stability–how a variable correlates with future
@@ -209,7 +207,7 @@ summary(modelFit)
 #> 
 #>  Autoregressive Effects:
 #>         ARX         ARY         ARZ 
-#>  0.50083542 -0.07953265 -0.24509220 
+#>  0.50083541 -0.07953269 -0.24509203 
 #> 
 #>  Cross Lagged Effects:
 #>   Effect Estimate Standard.Error P.Value
@@ -229,7 +227,7 @@ summary(modelFit)
 #> 
 #>  Autoregressive Effects:
 #>         ARX         ARY         ARZ 
-#>  0.55091896 -0.02944912 -0.16022887 
+#>  0.55091896 -0.02944912 -0.16022917 
 #> 
 #>  Cross Lagged Effects:
 #>   Effect Estimate Standard.Error P.Value
@@ -346,11 +344,11 @@ vector corresponds to one of the estimated Stability Informed Models.
 modelFit$ARVector
 #> $Model1
 #>         ARX         ARY         ARZ 
-#>  0.50083542 -0.07953265 -0.24509220 
+#>  0.50083541 -0.07953269 -0.24509203 
 #> 
 #> $Model2
 #>         ARX         ARY         ARZ 
-#>  0.55091896 -0.02944912 -0.16022887
+#>  0.55091896 -0.02944912 -0.16022917
 ```
 
 #### lavaanObjects
@@ -363,7 +361,7 @@ To output the lavaan object easily, you can use the
 ``` r
 lavaanSummary(modelFit)
 #> Model 1 
-#> lavaan 0.6-12 ended normally after 168 iterations
+#> lavaan 0.6-12 ended normally after 170 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -385,7 +383,7 @@ lavaanSummary(modelFit)
 #> Latent Variables:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
 #>   X_0 =~                                              
-#>     X        (ARX)    0.500       NA                  
+#>     X        (ARX)    0.500                           
 #>     Y                 0.600                           
 #>     Z       (Eff1)    0.466    0.213    2.184    0.029
 #>   Y_0 =~                                              
@@ -426,7 +424,7 @@ lavaanSummary(modelFit)
 #>     CYZ-(0.6*(E1*VX+CLYZ*CXY+ARZ*CXZ)+(E1*CXY    0.000
 #> 
 #> Model 2 
-#> lavaan 0.6-12 ended normally after 188 iterations
+#> lavaan 0.6-12 ended normally after 193 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -494,7 +492,7 @@ argument.
 
 ``` r
 lavaanSummary(modelFit, subset = 1)
-#> lavaan 0.6-12 ended normally after 168 iterations
+#> lavaan 0.6-12 ended normally after 170 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -516,7 +514,7 @@ lavaanSummary(modelFit, subset = 1)
 #> Latent Variables:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
 #>   X_0 =~                                              
-#>     X        (ARX)    0.500       NA                  
+#>     X        (ARX)    0.500                           
 #>     Y                 0.600                           
 #>     Z       (Eff1)    0.466    0.213    2.184    0.029
 #>   Y_0 =~                                              
