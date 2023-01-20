@@ -18,7 +18,7 @@ A print out containing the results for a set of Stability Informed Models
 Summarize a set of Stability Informed Models
 }
 \examples{
-\dontrun{
+\donttest{
 S <- matrix(.3, 5, 5)
 diag(S) <- 1
 set.seed(69)

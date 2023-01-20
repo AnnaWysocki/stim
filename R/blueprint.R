@@ -17,13 +17,7 @@
 #' @return        A character matrix
 #' @keywords internal
 #'
-#' @examples
-#' \dontrun{
-#' effects <- data.frame(predictor = "X_0", outcome = "Y", name = "CLxy", estimate = "Yes")
-#' use <- c("X", "Y")
-#' blueprint(effects, use)
-#'}
-#'
+
 blueprint <- function(effects, use){
 
   p <- length(use)

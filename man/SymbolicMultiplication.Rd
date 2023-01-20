@@ -17,16 +17,4 @@ symbMultiplication(x1, x2)
 Internal function used to do symbolic matrix multiplication using the Ryacas
 R package
 }
-\examples{
-\dontrun{
-blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-
-SymbolicCovMat <- matrix( c("VarX", "CovXY", "CovXY", "VarY"), ncol = 2, nrow = 2)
-
-B <- Ryacas::ysym(blueprint)
-Cov1 <- Ryacas::ysym(SymbolicCovMat)
-
-symbMultiplication(x1 = t(B), x2= Cov1)
-}
-}
 \keyword{internal}

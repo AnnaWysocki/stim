@@ -7,22 +7,10 @@
 #' @keywords internal
 #' @param x1 A Ryacas object.
 #' @param x2 A Ryacas object.
-#' @examples
-#' \dontrun{
-#' blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-#'
-#' SymbolicCovMat <- matrix( c("VarX", "CovXY", "CovXY", "VarY"), ncol = 2, nrow = 2)
-#'
-#' B <- Ryacas::ysym(blueprint)
-#' Cov1 <- Ryacas::ysym(SymbolicCovMat)
-#'
-#' symbMultiplication(x1 = t(B), x2= Cov1)
-#' }
+
 symbMultiplication <- function(x1, x2) {
   x1 %*% x2
 }
-
-
 
 #' Create a symbolic covariance matrix
 #'
@@ -37,15 +25,6 @@ symbMultiplication <- function(x1, x2) {
 #'
 #' @keywords internal
 #'
-#' @examples
-#' \dontrun{
-#' blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-#' colnames(blueprint) <- c("X", "Y")
-#' rownames(blueprint) <- c("X_0", "Y_0")
-#'  residualcov <- list(Syntax = 'X ~~ RCovXY * Y',
-#'                      Variables = data.frame(V1 = "X", V2 = "Y", Name = "RCovXY"))
-#' symbMatrix(blueprint, residualcov)
-#' }
 
 symbMatrix <- function(blueprint, residualcov){
 

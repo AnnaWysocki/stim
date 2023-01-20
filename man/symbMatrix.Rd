@@ -20,14 +20,4 @@ psi matrix
 \description{
 Create a symbolic covariance matrix
 }
-\examples{
-\dontrun{
-blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-colnames(blueprint) <- c("X", "Y")
-rownames(blueprint) <- c("X_0", "Y_0")
- residualcov <- list(Syntax = 'X ~~ RCovXY * Y',
-                     Variables = data.frame(V1 = "X", V2 = "Y", Name = "RCovXY"))
-symbMatrix(blueprint, residualcov)
-}
-}
 \keyword{internal}

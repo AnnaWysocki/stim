@@ -18,16 +18,4 @@ A character vector which contains the lavaan syntax to specify the latent variab
 \description{
 Create lavaan syntax based on the blueprint matrix
 }
-\examples{
-\dontrun{
-S <- matrix( c(1, .3, .3, 1), nrow = 2, ncol = 2)
-colnames(S) <- rownames(S) <- c("X", "Y")
-
-blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-colnames(blueprint) <- c("X", "Y")
-rownames(blueprint) <- c("X_0", "Y_0")
-
-lavaanEq(blueprint, S)
-}
-}
 \keyword{internal}

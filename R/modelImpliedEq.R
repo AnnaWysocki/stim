@@ -14,22 +14,7 @@
 #'         matrices that were used to get the model implied equations.
 #' @keywords internal
 #'
-#' @examples
-#'\dontrun{
-#' S <- matrix( c(1, .3, .3, 1), nrow = 2, ncol = 2)
-#' colnames(S) <- rownames(S) <- c("X", "Y")
-#'
-#' blueprint <- matrix( c("ARx", "CLxy", "ARy", "0"), nrow = 2, ncol = 2 )
-#' colnames(blueprint) <- c("X", "Y")
-#' rownames(blueprint) <- c("X_0", "Y_0")
-#'
-#'  stability <- data.frame(X = .3, Y = .3)
-#'
-#'  residualcov <- list(Syntax = 'X ~~ RCovXY * Y',
-#'                      Variables = data.frame(V1 = "X", V2 = "Y", Name = "RCovXY"))
-#'
-#'  modelImpliedEq(S, blueprint, stability, residualcov)
-#'}
+
 
 modelImpliedEq <- function(S, blueprint, stability, residualcov){
 

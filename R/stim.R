@@ -287,7 +287,7 @@ stim <- function(data = NULL, S = NULL, n = NULL,
 #' @return A print out containing the results for a set of Stability Informed Models
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' S <- matrix(.3, 5, 5)
 #' diag(S) <- 1
 #' set.seed(69)
