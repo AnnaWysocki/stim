@@ -9,10 +9,13 @@
 0 errors ✔ | 0 warnings ✔ | 1 notes ✖
 
 
-* checking CRAN incoming feasibility ... [8s] NOTE
-Maintainer: 'Anna Wysocki <awysocki@ucdavis.edu>'
+* Possibly misspelled words in DESCRIPTION:
+  Rhemtulla (7:268)
+  Wysocki (7:256)
 
-- I am the maintainer of this package
+- Both of these words are author names. Neither are mispelled
+
+## This is a resubmission. See below for admin comments and author response. 
 
 ## Comments from CRAN admins:
 
