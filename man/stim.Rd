@@ -28,7 +28,7 @@ Estimate a Stability Informed Model
 
 model <- 'Y~X'
 stability <- data.frame(X = .3, Y = .3)
-dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1), Z = rnorm(500, 0, 1))
+dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1))
 
 stim(data = dat, model = model, stability = stability)
 }

@@ -19,15 +19,11 @@ Summarize a set of Stability Informed Models
 }
 \examples{
 \donttest{
-S <- matrix(.3, 5, 5)
-diag(S) <- 1
-set.seed(69)
-example_data <- as.data.frame(MASS::mvrnorm(n = 300, mu = rep(0, 5), Sigma = S,))
+model <- 'Y~X'
+stability <- data.frame(X = .3, Y = .3)
+dat <- data.frame(Y = rnorm(500, 0, 1), X = rnorm(500, 0, 1))
 
-model <- 'X5 ~ X4 + X3'
-stability <- c(X3 = .3, X4 = .2, X5 = .1)
-
-modelFit <- stim(data = example_data, model = model, stability = stability)
+modelFit <- stim(data = dat, model = model, stability = stability)
 
 summary(modelFit)
 }
